@@ -127,7 +127,7 @@ it will not pass since different versions of Ghostscript generate different
 raster images:
     # make test
 
-Create printers (Fedora 6/7/.../25 and Ubuntu 7.10/8.x/.../16.x):
+Create printers (Fedora 6/7/.../28 and Ubuntu 7.10/8.x/.../18.x):
     # system-config-printer
 
 Create printers (Redhat 7.2/7.3/8.0/9.0, Fedora Core 1-5):
@@ -136,7 +136,7 @@ Create printers (Redhat 7.2/7.3/8.0/9.0, Fedora Core 1-5):
 Create printers (Mandrake/Manrivia)
     # printerdrake
 
-Create printers (openSUSE 10.x/11.x)
+Create printers (openSUSE 10.x/11.x/.../Leap 42.3)
     # yast2 printer
 
 Create printers (Ubuntu 5.10/6.06/6.10/7.04)

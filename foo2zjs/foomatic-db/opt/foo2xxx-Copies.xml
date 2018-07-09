@@ -65,10 +65,6 @@
 	    <arg_defval>1</arg_defval>
 	</constraint>
 	<constraint sense="true">
-	    <driver>foo2hbpl1</driver>
-	    <arg_defval>1</arg_defval>
-	</constraint>
-	<constraint sense="true">
 	    <driver>foo2hbpl2</driver>
 	    <arg_defval>1</arg_defval>
 	</constraint>

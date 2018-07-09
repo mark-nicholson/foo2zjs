@@ -1,13 +1,3 @@
-2018-05-01	Mark Nicholson <nicholson.mark@gmail.com>
-	* New Driver:  HBPL version 1
-	* New Printer: Dell 1250c using foo2hbpl1 driver.
-	* New Printer: Dell C1660 using foo2hbpl1 driver.
-	* New Printer: Dell C1760 using foo2hbpl1 driver.
-	* New Printer: Epson AcuLaser C1700 using foo2hbpl1 driver.
-	* New Printer: Fuji Xerox DocuPrint CP105 using foo2hbpl1 driver.
-		Incorporating foo2hbpl1 driver from patch by Dave Coffin
-	          <dcoffin@cybercom.net>
-
 2017-12-02	Rick Richardson <rick.richardson@comcast.net>
 	* New Printers: HP LaserJet Pro M12a, M12w
 
