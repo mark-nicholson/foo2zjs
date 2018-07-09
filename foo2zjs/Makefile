@@ -115,7 +115,7 @@ WEBFILES=	\
 		archhiperc.fig \
 		c3400n.png \
 		$(NULL)
-	
+
 FILES	=	\
 		README \
 		README.in \
@@ -148,6 +148,8 @@ FILES	=	\
 		foo2hiperc.c \
 		foo2hiperc.1in \
 		hbpl.h \
+		foo2hbpl1.c \
+		foo2hbpl1.1in \
 		foo2hbpl2.c \
 		foo2hbpl2.1in \
 		foo2ddst.c \
@@ -187,6 +189,8 @@ FILES	=	\
 		foo2slx-wrapper.1in \
 		foo2hiperc-wrapper.in \
 		foo2hiperc-wrapper.1in \
+		foo2hbpl1-wrapper.in \
+		foo2hbpl1-wrapper.1in \
 		foo2hbpl2-wrapper.in \
 		foo2hbpl2-wrapper.1in \
 		foo2ddst-wrapper.in \
@@ -266,7 +270,7 @@ PROGS+=		foo2lava lavadecode foo2qpdl qpdldecode opldecode
 PROGS+=		foo2oak oakdecode
 PROGS+=		foo2slx slxdecode
 PROGS+=		foo2hiperc hipercdecode
-PROGS+=		foo2hbpl2 hbpldecode
+PROGS+=		foo2hbpl1 foo2hbpl2 hbpldecode
 PROGS+=		gipddecode
 PROGS+=		foo2ddst ddstdecode
 ifneq ($(CUPS_SERVERBIN),)
@@ -278,7 +282,7 @@ ifneq ($(CUPS_SERVERBIN),)
 endif
 SHELLS=		foo2zjs-wrapper foo2oak-wrapper foo2hp2600-wrapper \
 		foo2xqx-wrapper foo2lava-wrapper foo2qpdl-wrapper \
-		foo2slx-wrapper foo2hiperc-wrapper foo2hbpl2-wrapper \
+		foo2slx-wrapper foo2hiperc-wrapper foo2hbpl1-wrapper foo2hbpl2-wrapper \
 		foo2ddst-wrapper
 SHELLS+=	foo2zjs-pstops
 SHELLS+=	printer-profile
@@ -290,6 +294,7 @@ MANPAGES+=	foo2lava-wrapper.1 foo2lava.1 lavadecode.1 opldecode.1
 MANPAGES+=	foo2qpdl-wrapper.1 foo2qpdl.1 qpdldecode.1
 MANPAGES+=	foo2slx-wrapper.1 foo2slx.1 slxdecode.1
 MANPAGES+=	foo2hiperc-wrapper.1 foo2hiperc.1 hipercdecode.1
+MANPAGES+=	foo2hbpl1-wrapper.1 foo2hbpl1.1
 MANPAGES+=	foo2hbpl2-wrapper.1 foo2hbpl2.1 hbpldecode.1
 MANPAGES+=	foo2ddst-wrapper.1 foo2ddst.1 ddstdecode.1
 MANPAGES+=	gipddecode.1
@@ -470,6 +475,9 @@ all-done:
 foo2ddst: foo2ddst.o $(LIBJBG)
 	$(CC) $(CFLAGS) -o $@ foo2ddst.o $(LIBJBG)
 
+foo2hbpl1: foo2hbpl1.o
+	$(CC) $(CFLAGS) -o $@ foo2hbpl1.o
+
 foo2hbpl2: foo2hbpl2.o $(LIBJBG)
 	$(CC) $(CFLAGS) -o $@ foo2hbpl2.o $(LIBJBG)
 
@@ -499,6 +507,12 @@ foo2zjs: foo2zjs.o $(LIBJBG)
 
 
 foo2ddst-wrapper: foo2ddst-wrapper.in Makefile
+	[ ! -f $@ ] || chmod +w $@
+	sed < $@.in > $@ \
+	    -e 's@^PREFIX=.*@PREFIX=$(PREFIX)@' || (rm -f $@ && exit 1)
+	chmod 555 $@
+
+foo2hbpl1-wrapper: foo2hbpl1-wrapper.in Makefile
 	[ ! -f $@ ] || chmod +w $@
 	sed < $@.in > $@ \
 	    -e 's@^PREFIX=.*@PREFIX=$(PREFIX)@' || (rm -f $@ && exit 1)
@@ -1202,6 +1216,7 @@ uninstall:
 	-rm -f /usr/bin/foo2slx-wrapper /usr/bin/foo2slx /usr/bin/slxdecode
 	-rm -f /usr/bin/foo2hiperc-wrapper /usr/bin/foo2hiperc
 	-rm -f /usr/bin/hipercdecode
+	-rm -f /usr/bin/foo2hbpl1-wrapper /usr/bin/foo2hbpl1
 	-rm -f /usr/bin/foo2hbpl2-wrapper /usr/bin/foo2hbpl2
 	-rm -f /usr/bin/hbpldecode
 	-rm -f /usr/bin/foo2ddst-wrapper /usr/bin/foo2ddst /usr/bin/ddstdecode
@@ -1236,7 +1251,7 @@ clean:
 	-rm -f foo2qpdl.o qpdldecode.o
 	-rm -f foo2slx.o slxdecode.o
 	-rm -f foo2hiperc.o hipercdecode.o
-	-rm -f foo2hbpl2.o hbpldecode.o
+	-rm -f foo2hbpl1.o foo2hbpl2.o hbpldecode.o
 	-rm -f opldecode.o gipddecode.o
 	-rm -f foo2dsst.o ddstdecode.o
 	-rm -f command2foo2lava-pjl.o
@@ -1482,6 +1497,10 @@ ppd:
 	    *C3530*)	        driver=foo2hiperc;; \
 	    *C5[12568][05]0*)   driver=foo2hiperc;; \
 	    *CLP*|*CLX*|*6110*) driver=foo2qpdl;; \
+	    *1250*)		driver=foo2hbpl1;; \
+	    *1660*|*1760*)	driver=foo2hbpl1;; \
+	    *C1700*)		driver=foo2hbpl1;; \
+	    *CP105*)		driver=foo2hbpl1;; \
 	    *6015*|*1355*)	driver=foo2hbpl2;; \
 	    *C1765*)		driver=foo2hbpl2;; \
 	    *CX17*)		driver=foo2hbpl2;; \
@@ -1571,6 +1590,8 @@ install-man: man
 	$(INSTALL) -c -m 644 foo2hiperc.1 $(MANDIR)/man1/
 	$(INSTALL) -c -m 644 foo2hiperc-wrapper.1 $(MANDIR)/man1/
 	$(INSTALL) -c -m 644 hipercdecode.1 $(MANDIR)/man1/
+	$(INSTALL) -c -m 644 foo2hbpl1.1 $(MANDIR)/man1/
+	$(INSTALL) -c -m 644 foo2hbpl1-wrapper.1 $(MANDIR)/man1/
 	$(INSTALL) -c -m 644 foo2hbpl2.1 $(MANDIR)/man1/
 	$(INSTALL) -c -m 644 foo2hbpl2-wrapper.1 $(MANDIR)/man1/
 	$(INSTALL) -c -m 644 hbpldecode.1 $(MANDIR)/man1/

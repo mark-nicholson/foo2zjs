@@ -60,10 +60,35 @@
 2014-04-08	Rick Richardson <rick.richardson@comcast.net>
 	* Upgrade to JBIGKIT 2.1
 
+2014-04-04	Dave Coffin <dcoffin@cybercom.net>
+	* fixed all known bugs in foo2hbpl1.c.  It now print multi-page
+	  color and grayscale documents without resetting printer.
+
 2014-04-01	Rick Richardson <rick.richardson@comcast.net>
-	* foo2hbpl2 foomatic-db files and PPDs:
+	* foo2hbpl1, foo2hbpl2 foomatic-db files and PPDs:
 	    Bug with default PageSize.
-	    PLEASE delete and recreate the foo2hbpl2 printers.
+	    PLEASE delete and recreate the foo2hbpl1, foo2hbpl2 printers.
+
+2014-03-30	Rick Richardson <rick.richardson@comcast.net>
+	* foo2hbpl1.c: Cleanup the code
+
+2014-03-25	Rick Richardson <rick.richardson@comcast.net>
+	* foomatic and PPD stuff for foo2hbpl1 printers: Halftone and ICM
+
++2014-03-24	Rick Richardson <rick.richardson@comcast.net>
+	* foomatic and PPD stuff for foo2hbpl1 printers
+	    preliminary for: Dell 1250c, Dell C1660w, Dell C1760nw,
+	    Epson AcuLaser C1700, Fuji-Xerox DocuPrint CP105b
+	* foo2hbpl1-wrapper: allow for gs 7.x or gs 8.x
+
+2014-03-24	Dave Coffin <dcoffin@cybercom.net>
+	* foo2hbpl1, foo2hbpl1-wrapper, et al: first cut at revision 1
+	    stuff.  Color works, mono doesn't. No multiple pages. Printer
+	    shows:
+		        Restart Printer
+			Contact Support
+			IfMessageReturns
+			016-313
 
 2014-03-22	Rick Richardson <rick.richardson@comcast.net>
 	* hbpldecode: another redundancy from Dave Coffin
