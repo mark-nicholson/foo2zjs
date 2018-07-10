@@ -274,10 +274,11 @@ PROGS+=		foo2hbpl1 foo2hbpl2 hbpldecode
 PROGS+=		gipddecode
 PROGS+=		foo2ddst ddstdecode
 ifneq ($(CUPS_SERVERBIN),)
-    ifneq ($(CUPS_DEVEL),)
-	ifneq ($(CUPS_GOODAPI),)
-	    PROGS+=	command2foo2lava-pjl
-	endif
+	ifneq ($(CUPS_DEVEL),)
+		ifneq ($(CUPS_GOODAPI),)
+	    	PROGS+=	command2foo2lava-pjl
+			LAVAPJL_LINK=$(CUPS_SERVERBIN)/filter/command2foo2lava-pjl
+		endif
     endif
 endif
 SHELLS=		foo2zjs-wrapper foo2oak-wrapper foo2hp2600-wrapper \
@@ -892,11 +893,13 @@ MACMODEL=/Library/Printers/PPDs/Contents/Resources
 PPD=$(PREFIX)/share/ppd
 VARPPD=/var/lp/ppd
 install-ppd:
+	@echo "Running 'install-ppd'"
 	#
 	# Install PPD files for CUPS
 	#
 	export PATH=$$PATH:`pwd`:; \
 	if [ -x /usr/sbin/ppdmgr -a -s $(VARPPD)/ppdcache ]; then \
+	    echo "ppd-install option A"; \
 	    $(INSTALL) $(LPgid) -d $(VARPPD)/user; \
 	    cd PPD; \
 	    for ppd in *.ppd; do \
@@ -907,6 +910,7 @@ install-ppd:
 	    done; \
 	    ppdmgr -u; \
 	elif [ -d $(PPD) ]; then \
+	    echo "ppd-install option B"; \
 	    find $(PPD) -name '*foo2zjs*' | xargs rm -rf; \
 	    find $(PPD) -name '*foo2hp*' | xargs rm -rf; \
 	    find $(PPD) -name '*foo2xqx*' | xargs rm -rf; \
@@ -916,12 +920,14 @@ install-ppd:
 	    find $(PPD) -name '*foo2hiperc*' | xargs rm -rf; \
 	    find $(PPD) -name '*foo2hbpl*' | xargs rm -rf; \
 	    find $(PPD) -name '*foo2ddst*' | xargs rm -rf; \
-	    [ -d $(PPD)/foo2zjs ] || mkdir $(PPD)/foo2zjs; \
+	    [ -d $(PPD)/foo2zjs ] || mkdir -p $(PPD)/foo2zjs; \
 	    cd PPD; \
 	    for ppd in *.ppd; do \
 		modify-ppd <$$ppd | gzip > $(PPD)/foo2zjs/$$ppd.gz; \
 		chmod 664 $(PPD)/foo2zjs/$$ppd.gz; \
 	    done; \
+	else \
+	    echo "ppd-install option C"; \
 	fi
 	#
 	export PATH=$$PATH:`pwd`:; \
@@ -1087,9 +1093,9 @@ install-hotplug-osx:
 	cd osx-hotplug; $(MAKE) PREFIX=$(PREFIX) install-hotplug
 
 install-filter:
-	if [ "$(CUPS_SERVERBIN)" != "" ]; then \
+	if [ "$(LAVAPJL_LINK)" != "" ]; then \
 	    $(INSTALL) -d $(CUPS_SERVERBIN)/filter; \
-	    ln -sf $(BIN)/command2foo2lava-pjl $(CUPS_SERVERBIN)/filter/; \
+	    ln -sf $(BIN)/command2foo2lava-pjl $(LAVAPJL_LINK); \
 	fi
 
 CUPSDCONF=/etc/cups/cupsd.conf
@@ -1226,7 +1232,7 @@ uninstall:
 	-rm -f /usr/bin/foo2zjs-icc2ps
 	-rm -f /usr/bin/foo2zjs-pstops
 	-rm -f /usr/bin/command2foo2lava-pjl
-	-rm -f /usr/lib/cups/filter/command2foo2lava-pjl
+	-rm -f $(CUPS_SERVERBIN)/filter/command2foo2lava-pjl
 	-rm -f /usr/share/applications/hplj1020.desktop
 	-rm -f /usr/share/pixmaps/hplj1020_icon.png
 	-cd foomatic-db; for i in `find driver opt printer -name "*.xml"`; do \
@@ -1618,7 +1624,9 @@ install-doc: doc
 	$(INSTALL) -c -m 644 manual.pdf $(DOCDIR)
 	$(INSTALL) -c -m 644 COPYING $(DOCDIR)
 	$(INSTALL) -c -m 644 INSTALL $(DOCDIR)
+ifeq ($(UNAME),Darwin)
 	$(INSTALL) -c -m 644 INSTALL.osx $(DOCDIR)
+endif
 	$(INSTALL) -c -m 644 README $(DOCDIR)
 	$(INSTALL) -c -m 644 ChangeLog $(DOCDIR)
 
