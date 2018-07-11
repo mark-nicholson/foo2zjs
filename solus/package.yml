@@ -1,0 +1,130 @@
+name       : foo2zjs
+version    : 2018.05.19
+release    : 1
+source     :
+    - git|https://github.com/mark-nicholson/foo2zjs.git : 816766f48177af52d8834f4a100b66ba580cffa3
+license    : GPL-2.0-or-later
+component  : desktop.core
+summary    : Printer driver for ZjStream-based printers
+builddeps  :
+    - ghostscript-devel
+    - foomatic-db
+    - foomatic-db-engine
+    - cups
+    - cups-devel
+    - cups-filters
+    - groff
+description: |
+    Assorted printer drivers for the following printers:
+        Dell-1250c
+        Dell-1355
+        Dell-C1660
+        Dell-C1760
+        Dell-C1765
+        Epson-AcuLaser C1700
+        Epson-AcuLaser CX17NF
+        Epson-AcuLaser M1400
+        Fuji Xerox-DocuPrint CM205
+        Fuji Xerox-DocuPrint CM215
+        Fuji Xerox-DocuPrint CP105
+        Fuji Xerox-DocuPrint M215
+        Fuji Xerox-DocuPrint P205
+        Generic-OAKT Printer
+        Generic-ZjStream Printer
+        HP-Color LaserJet 1500
+        HP-Color LaserJet 1600
+        HP-Color LaserJet 2600n
+        HP-Color LaserJet CP1215
+        HP-LaserJet 1000
+        HP-LaserJet 1005
+        HP-LaserJet 1018
+        HP-LaserJet 1020
+        HP-LaserJet 1022nw
+        HP-LaserJet 1022n
+        HP-LaserJet 1022
+        HP-LaserJet M1005 MFP
+        HP-LaserJet M1120 MFP
+        HP-LaserJet M1319 MFP
+        HP-LaserJet P1005
+        HP-LaserJet P1006
+        HP-LaserJet P1007
+        HP-LaserJet P1008
+        HP-LaserJet P1505n
+        HP-LaserJet P1505
+        HP-LaserJet P2014n
+        HP-LaserJet P2014
+        HP-LaserJet P2035n
+        HP-LaserJet P2035
+        HP-LaserJet Pro CP1025nw
+        HP-LaserJet Pro M1212nf MFP
+        HP-LaserJet Pro M12a
+        HP-LaserJet Pro M12w
+        HP-LaserJet Pro P1102w
+        HP-LaserJet Pro P1102
+        HP-LaserJet Pro P1566
+        HP-LaserJet Pro P1606dn
+        KONICA MINOLTA-magicolor 1600W
+        KONICA MINOLTA-magicolor 1680MF
+        KONICA MINOLTA-magicolor 1690MF
+        KONICA MINOLTA-magicolor 2430 DL
+        KONICA MINOLTA-magicolor 2480 MF
+        KONICA MINOLTA-magicolor 2490 MF
+        KONICA MINOLTA-magicolor 2530 DL
+        KONICA MINOLTA-magicolor 4690MF
+        Kyocera-KM-1635
+        Kyocera-KM-2035
+        Lexmark-C500
+        Minolta-Color PageWorks Pro L
+        Minolta-magicolor 2200 DL
+        Minolta-magicolor 2300 DL
+        Minolta-magicolor 2430 DL
+        Oki-C110
+        Oki-C301dn
+        Oki-C3100
+        Oki-C310dn
+        Oki-C3200
+        Oki-C3300
+        Oki-C3400
+        Oki-C3530 MFP
+        Oki-C5100
+        Oki-C511dn
+        Oki-C5200
+        Oki-C5500
+        Oki-C5600
+        Oki-C5650
+        Oki-C5800
+        Oki-C810
+        Olivetti-d-Color P160W
+        Ricoh-SP 112
+        Ricoh-SP 201Nw
+        Samsung-CLP-300
+        Samsung-CLP-310
+        Samsung-CLP-315
+        Samsung-CLP-325
+        Samsung-CLP-365
+        Samsung-CLP-600
+        Samsung-CLP-610
+        Samsung-CLP-620
+        Samsung-CLX-2160
+        Samsung-CLX-3160
+        Samsung-CLX-3175
+        Samsung-CLX-3185
+        Xerox-Phaser 3010
+        Xerox-Phaser 3040
+        Xerox-Phaser 6110
+        Xerox-Phaser 6115MFP
+        Xerox-Phaser 6121MFP
+        Xerox-WorkCentre 3045
+        Xerox-WorkCentre 6015
+#
+# Note, there is some sort of parallelization problem with the
+# original makefile -- that is why there is a '-j1' flag
+#
+build      : |
+    %make -j1 -C foo2zjs
+install    : |
+    # pre-create these folders for the installer
+    mkdir -p $installdir/usr/lib/cups
+    mkdir -p $installdir/usr/share/ppd
+    # now run the installer
+    %make_install -j1 -C foo2zjs
