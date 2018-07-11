@@ -1095,7 +1095,7 @@ install-hotplug-osx:
 install-filter:
 	if [ "$(LAVAPJL_LINK)" != "" ]; then \
 	    $(INSTALL) -d $(CUPS_SERVERBIN)/filter; \
-	    ln -sf $(BIN)/command2foo2lava-pjl $(LAVAPJL_LINK); \
+	    ln -sf /usr/bin/command2foo2lava-pjl $(LAVAPJL_LINK); \
 	fi
 
 CUPSDCONF=/etc/cups/cupsd.conf
